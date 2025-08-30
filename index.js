@@ -18,12 +18,20 @@ client.once("ready", () => {
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
 
-  if (message.content === "!ping") {
-    message.reply("Pong!");
+  message.reply(
+    "Sorry, I didn't understand that. I am still under development."
+  );
+});
+
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isCommand()) return;
+
+  const { commandName } = interaction;
+
+  if (commandName === "ping") {
+    await interaction.reply("Pong!");
   } else {
-    message.reply(
-      "Sorry, I didn't understand that. I am still under development."
-    );
+    await interaction.reply("Sorry, I didn't understand that.");
   }
 });
 
