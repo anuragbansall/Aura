@@ -16,8 +16,14 @@ client.once("ready", () => {
 });
 
 client.on("messageCreate", (message) => {
+  if (message.author.bot) return;
+
   if (message.content === "!ping") {
     message.reply("Pong!");
+  } else {
+    message.reply(
+      "Sorry, I didn't understand that. I am still under development."
+    );
   }
 });
 
