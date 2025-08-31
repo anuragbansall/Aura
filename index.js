@@ -1,5 +1,6 @@
-import { Client, GatewayIntentBits } from "discord.js";
 import { config } from "dotenv";
+import { Client, GatewayIntentBits } from "discord.js";
+import { generateContent } from "./ai.js";
 
 config();
 
@@ -15,12 +16,21 @@ client.once("ready", () => {
   console.log(`Logged in as ${client.user.tag}`);
 });
 
-client.on("messageCreate", (message) => {
+client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
 
-  message.reply(
-    "Sorry, I didn't understand that. I am still under development."
-  );
+  try {
+    const response = await generateContent(message.content);
+
+    if (response.length > 2000) {
+      throw new Error("Response exceeds Discord's message limit.");
+    }
+
+    message.reply(response);
+  } catch (error) {
+    console.error("Error generating content:", error);
+    message.reply(error.message || "Sorry, something went wrong.");
+  }
 });
 
 client.on("interactionCreate", async (interaction) => {
